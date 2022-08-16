@@ -18,6 +18,7 @@ Cypress.Commands.overwrite(
       ...options,
       url: url as string,
       onBeforeLoad: (win) => {
+        console.log("options", options);
         win.localStorage.clear();
         (win as any).ethereum = options?.jsonRpcUrl
           ? InjectedEip1193Bridge.withJsonRpcProvider(options)

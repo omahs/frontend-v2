@@ -5,6 +5,7 @@ import {
   Network,
 } from "@ethersproject/providers";
 import { Wallet } from "@ethersproject/wallet";
+import { ethers } from "ethers";
 
 export const DEFAULT_TEST_PK =
   Cypress.env("DEFAULT_TEST_PK") ||
@@ -53,12 +54,51 @@ export class InjectedEip1193Bridge extends Eip1193Bridge {
     }
   }
 
-  async send(method: string, params: Array<any>): Promise<any> {
+  async send(...args): Promise<any> {
     const network = await this.provider.getNetwork();
+    const isCallbackForm =
+      typeof args[0] === "object" && typeof args[1] === "function";
+    let callback;
+    let method;
+    let params;
+    if (isCallbackForm) {
+      callback = args[1];
+      method = args[0].method;
+      params = args[0].params;
+    } else {
+      method = args[0];
+      params = args[1];
+    }
+
+    console.log("---method", method);
+    console.log("---params", params);
 
     switch (method) {
       case "net_version":
         return network.chainId;
+
+      case "eth_chainId":
+        const result = await this.provider.getNetwork();
+        console.log("result", result);
+        return result.chainId;
+
+      case "eth_call":
+        const req = ethers.providers.JsonRpcProvider.hexlifyTransaction(
+          params[0],
+          method
+        );
+        return await this.provider.call(req, params[1]);
+
+      // case "eth_accounts":
+
+      // Uniswap's original code
+      case "eth_requestAccounts" || method === "eth_accounts":
+        if (isCallbackForm) {
+          callback({ result: [DEFAULT_TEST_PK] });
+        } else {
+          return Promise.resolve([DEFAULT_TEST_PK]);
+        }
+
       default:
         break;
     }

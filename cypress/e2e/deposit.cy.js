@@ -15,12 +15,12 @@ describe("Deposit", () => {
     cy.visit("/", { jsonRpcUrl: "http://127.0.0.1:8545" });
     cy.connectInjectedWallet("connect-wallet");
 
-    cy.dataCy("acx-balance").should("be.visible");
+    // cy.dataCy("acx-balance").should("be.visible");
 
-    console.log(
-      cy.window().then((win) => {
-        console.log("win.eth", win.ethereum);
-      })
-    );
+    // console.log(
+    //   cy.window().then((win) => {
+    //     console.log("win.eth", win.ethereum);
+    //   })
+    // );
   });
 });
