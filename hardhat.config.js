@@ -13,6 +13,7 @@ module.exports = {
       hardfork: "london",
       gasPrice: "auto",
       initialBaseFeePerGas: 1_000_000_000,
+      chainId: "0x1",
     },
   },
 };
