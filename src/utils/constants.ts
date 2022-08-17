@@ -28,6 +28,7 @@ export enum ChainId {
   KOVAN_OPTIMISM = 69,
   ARBITRUM_RINKEBY = 421611,
   GOERLI = 5,
+  HARDHAT = 31337,
   // Polygon testnet
   MUMBAI = 80001,
 }
