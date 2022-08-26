@@ -3,9 +3,14 @@ import { StakingReward, StakingForm, StakingExitAction } from "./components";
 import { useStakingView } from "./useStakingView";
 
 const Staking = () => {
-  const { amountOfRewardsClaimable, poolName, exitLinkURI, poolLogoURI } =
-    useStakingView();
-  return (
+  const {
+    amountOfRewardsClaimable,
+    poolName,
+    exitLinkURI,
+    poolLogoURI,
+    isPoolValid,
+  } = useStakingView();
+  return isPoolValid ? (
     <Wrapper>
       <StakingExitAction
         poolName={poolName}
@@ -15,6 +20,8 @@ const Staking = () => {
       <StakingForm />
       <StakingReward maximumClaimableAmount={amountOfRewardsClaimable} />
     </Wrapper>
+  ) : (
+    <div>404</div>
   );
 };
 
