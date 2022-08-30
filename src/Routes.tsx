@@ -20,6 +20,8 @@ import {
   enableMigration,
   WrongNetworkError,
   rewardsBannerWarning,
+  stringValueInArray,
+  getConfig,
 } from "utils";
 import { ReactComponent as InfoLogo } from "assets/icons/info-24.svg";
 import Toast from "components/Toast";
@@ -30,6 +32,7 @@ function useRoutes() {
   const location = useLocation();
   const history = useHistory();
   const { error, removeError } = useError();
+  const config = getConfig();
   // force the user on /pool page if showMigrationPage is active.
   useEffect(() => {
     if (enableMigration && location.pathname !== "/pool") {
@@ -44,11 +47,12 @@ function useRoutes() {
     error,
     removeError,
     location,
+    config,
   };
 }
 // Need this component for useLocation hook
 const Routes: React.FC = () => {
-  const { openSidebar, setOpenSidebar, error, removeError, location } =
+  const { openSidebar, setOpenSidebar, error, removeError, location, config } =
     useRoutes();
   return (
     <>
@@ -81,7 +85,22 @@ const Routes: React.FC = () => {
         <Route exact path="/about" component={About} />
         <Route exact path="/rewards" component={Rewards} />
         <Route exact path="/airdrop" component={Claim} />
-        <Route exact path="/rewards/staking/:poolId" component={Staking} />
+        <Route
+          exact
+          path="/rewards/staking/:poolId"
+          render={({ match }) => {
+            const poolIdFound = stringValueInArray(
+              match.params.poolId.toLowerCase(),
+              config.getPoolSymbols()
+            );
+
+            if (poolIdFound) {
+              return <Staking />;
+            } else {
+              return <NotFound custom404Message="Pool not found." />;
+            }
+          }}
+        />
         <Route exact path="/" component={Send} />
         <Route path="*" component={NotFound} />
       </Switch>
