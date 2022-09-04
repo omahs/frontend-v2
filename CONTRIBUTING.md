@@ -43,7 +43,7 @@ It's also recommended to rebase before opening a PR.
 This guide assumes you have a branch in the repository, and not a fork, and the github repository is named `origin`.
 
 1. Start on your branch. Ensure there are no uncommitted changes, if so commit or stash them.
-2. `git fetch origin master` - This will fetch latest changes to master without switching branches. This assumes your upstream repository is names "origin".
+2. `git fetch origin master` - This will fetch latest changes to master without switching branches. This assumes your upstream repository is named "origin".
 3. `git rebase HEAD~X --onto origin/master` - Rebase your changes on top of the latest changes on master, where X is the number of commits you have made to your branch.
 4. If conflicts occur, fix them, `git add` them and `git rebase --continue` until the rebase is complete.
 5. If you have stashed changes before the rebase, `git stash pop` them and commit them or keep working.
